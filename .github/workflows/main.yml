@@ -9,7 +9,7 @@ on:
       - 'main'
 
 jobs:
-  linux:
+  ubuntu:
     name: Test on OTP ${{ matrix.otp_version }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
@@ -20,6 +20,25 @@ jobs:
 
     container:
       image: erlang:${{ matrix.otp_version }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Compile
+      run: rebar3 compile
+    - name: Unit tests
+      run: rebar3 eunit
+
+  alpine:
+    name: Test on OTP ${{ matrix.otp_version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        otp_version: [21, 22, 23]
+        os: [alpine-latest]
+
+    container:
+      image: erlang:${{ matrix.otp_version }}-alpine
 
     steps:
     - uses: actions/checkout@v2
