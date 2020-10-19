@@ -29,6 +29,14 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) 
     return enif_make_badarg(env);
   }
 
+  if (!enif_inspect_binary(env, argv[0], &passwd)) {
+    return enif_make_badarg(env);
+  }
+
+  if (!enif_inspect_binary(env, argv[1], &salt)) {
+    return enif_make_badarg(env);
+  }
+
   if (!enif_get_uint(env, argv[2], &N)) {
     return enif_make_badarg(env);
   }
@@ -42,14 +50,6 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) 
   }
 
   if (!enif_get_ulong(env, argv[5], &buf_len)) {
-    return enif_make_badarg(env);
-  }
-
-  if (!enif_inspect_binary(env, argv[0], &passwd)) {
-    return enif_make_badarg(env);
-  }
-
-  if (!enif_inspect_binary(env, argv[1], &salt)) {
     return enif_make_badarg(env);
   }
 
