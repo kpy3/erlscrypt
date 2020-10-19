@@ -24,9 +24,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Compile
-      run: ./rebar3 compile
+      run: rebar3 compile
     - name: Unit tests
-      run: ./rebar3 eunit
+      run: rebar3 eunit
 
   macos:
     name: Test on MacOS
@@ -34,9 +34,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install Erlang
-      run: brew install erlang
+    - name: Install Erlang and rebar3
+      run: brew install erlang rebar3
     - name: Compile
-      run: ./rebar3 compile
+      run: rebar3 compile
     - name: Unit tests
-      run: ./rebar3 eunit
+      run: rebar3 eunit
