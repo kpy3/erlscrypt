@@ -64,10 +64,12 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) 
   }
 
   if (!enif_alloc_binary(buf_len, &result)) {
+    free(buf);
     return enif_make_badarg(env);
   }
 
   memcpy(result.data, buf, buf_len);
+  free(buf);
   return enif_make_binary(env, &result);
 }
 
