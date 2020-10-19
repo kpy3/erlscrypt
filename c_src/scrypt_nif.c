@@ -20,10 +20,10 @@ static ERL_NIF_TERM mk_error(ErlNifEnv *env, const char *mesg) {
 }
 
 static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) {
-  size_t passwdlen, saltlen, buflen;
   uint32_t N, r, p;
-  uint8_t *passwd, *salt, *buf;
-  ErlNifBinary passwd_bin, salt_bin, result;
+  size_t buf_len;
+  uint8_t *buf;
+  ErlNifBinary passwd, salt, result;
 
   if (argc != 6) {
     return enif_make_badarg(env);
@@ -41,51 +41,33 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) 
     return enif_make_badarg(env);
   }
 
-  if (!enif_get_ulong(env, argv[5], &buflen)) {
+  if (!enif_get_ulong(env, argv[5], &buf_len)) {
     return enif_make_badarg(env);
   }
 
-  if (enif_inspect_binary(env, argv[0], &passwd_bin)) {
-    passwd = (uint8_t *)malloc(passwd_bin.size);
-    passwdlen = passwd_bin.size;
-    memcpy(passwd, passwd_bin.data, passwd_bin.size);
-  } else {
+  if (!enif_inspect_binary(env, argv[0], &passwd)) {
     return enif_make_badarg(env);
   }
 
-  if (enif_inspect_binary(env, argv[1], &salt_bin)) {
-    salt = (uint8_t *)malloc(salt_bin.size);
-    saltlen = salt_bin.size;
-    memcpy(salt, salt_bin.data, salt_bin.size);
-  } else {
-    free(passwd);
+  if (!enif_inspect_binary(env, argv[1], &salt)) {
     return enif_make_badarg(env);
   }
 
-  buf = calloc(1, buflen);
+  buf = calloc(1, buf_len);
   if (buf == NULL) {
-    free(passwd);
-    free(salt);
     return enif_make_badarg(env);
   }
 
-  if (crypto_scrypt(passwd, passwdlen, salt, saltlen, N, r, p, buf, buflen)) {
-    free(passwd);
-    free(salt);
+  if (crypto_scrypt(passwd.data, passwd.size, salt.data, salt.size, N, r, p, buf, buf_len)) {
     free(buf);
     return enif_make_badarg(env);
   }
 
-  free(passwd);
-  free(salt);
-
-  if (!enif_alloc_binary(buflen, &result)) {
-    free(buf);
+  if (!enif_alloc_binary(buf_len, &result)) {
     return enif_make_badarg(env);
   }
 
-  memcpy(result.data, buf, buflen);
-  free(buf);
+  memcpy(result.data, buf, buf_len);
   return enif_make_binary(env, &result);
 }
 
