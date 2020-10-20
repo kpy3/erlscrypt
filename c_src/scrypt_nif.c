@@ -22,7 +22,6 @@ static ERL_NIF_TERM mk_error(ErlNifEnv *env, const char *mesg) {
 static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) {
   uint32_t N, r, p;
   size_t buf_len;
-  uint8_t *buf;
   ErlNifBinary passwd, salt, result;
 
   if (argc != 6) {
@@ -53,23 +52,14 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) 
     return enif_make_badarg(env);
   }
 
-  buf = calloc(1, buf_len);
-  if (buf == NULL) {
-    return enif_make_badarg(env);
-  }
-
-  if (crypto_scrypt(passwd.data, passwd.size, salt.data, salt.size, N, r, p, buf, buf_len)) {
-    free(buf);
-    return enif_make_badarg(env);
-  }
-
   if (!enif_alloc_binary(buf_len, &result)) {
-    free(buf);
     return enif_make_badarg(env);
   }
 
-  memcpy(result.data, buf, buf_len);
-  free(buf);
+  if (crypto_scrypt(passwd.data, passwd.size, salt.data, salt.size, N, r, p, result.data, result.size)) {
+    return enif_make_badarg(env);
+  }
+
   return enif_make_binary(env, &result);
 }
 
