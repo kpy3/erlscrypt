@@ -1,9 +1,9 @@
-#include "scrypt_platform.h"
 #include <stdlib.h>
 #include <string.h>
-
-#include "crypto_scrypt.h"
 #include "erl_nif.h"
+
+#include "scrypt_platform.h"
+#include "crypto_scrypt.h"
 
 static ERL_NIF_TERM mk_atom(ErlNifEnv *env, const char *atom) {
   ERL_NIF_TERM ret;
@@ -15,11 +15,22 @@ static ERL_NIF_TERM mk_atom(ErlNifEnv *env, const char *atom) {
   return ret;
 }
 
-static ERL_NIF_TERM mk_error(ErlNifEnv *env, const char *mesg) {
-  return enif_make_tuple2(env, mk_atom(env, "error"), mk_atom(env, mesg));
+static ERL_NIF_TERM report_bad_param(ErlNifEnv *env, const char *param) {
+  return enif_raise_exception(
+      env, enif_make_tuple2(env, mk_atom(env, "bad_param"),
+                            enif_make_string(env, param, ERL_NIF_LATIN1)));
 }
 
-static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) {
+static ERL_NIF_TERM report_allocation_error(ErlNifEnv *env) {
+  return enif_raise_exception(env, mk_atom(env, "allocation_error"));
+}
+
+static ERL_NIF_TERM report_scrypt_error(ErlNifEnv *env) {
+  return enif_raise_exception(env, mk_atom(env, "scrypt_error"));
+}
+
+static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc,
+                           const ERL_NIF_TERM argv[]) {
   uint32_t N, r, p;
   size_t buf_len;
   ErlNifBinary passwd, salt, result;
@@ -29,35 +40,36 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[]) 
   }
 
   if (!enif_inspect_binary(env, argv[0], &passwd)) {
-    return enif_make_badarg(env);
+    return report_bad_param(env, "Passwd");
   }
 
   if (!enif_inspect_binary(env, argv[1], &salt)) {
-    return enif_make_badarg(env);
+    return report_bad_param(env, "Salt");
   }
 
   if (!enif_get_uint(env, argv[2], &N)) {
-    return enif_make_badarg(env);
+    return report_bad_param(env, "N");
   }
 
   if (!enif_get_uint(env, argv[3], &r)) {
-    return enif_make_badarg(env);
+    return report_bad_param(env, "R");
   }
 
   if (!enif_get_uint(env, argv[4], &p)) {
-    return enif_make_badarg(env);
+    return report_bad_param(env, "P");
   }
 
   if (!enif_get_ulong(env, argv[5], &buf_len)) {
-    return enif_make_badarg(env);
+    return report_bad_param(env, "Buflen");
   }
 
   if (!enif_alloc_binary(buf_len, &result)) {
-    return enif_make_badarg(env);
+    return report_allocation_error(env);
   }
 
-  if (crypto_scrypt(passwd.data, passwd.size, salt.data, salt.size, N, r, p, result.data, result.size)) {
-    return enif_make_badarg(env);
+  if (crypto_scrypt(passwd.data, passwd.size, salt.data, salt.size, N, r, p,
+                    result.data, result.size)) {
+    return report_scrypt_error(env);
   }
 
   return enif_make_binary(env, &result);
