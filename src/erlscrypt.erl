@@ -1,4 +1,4 @@
--module(scrypt).
+-module(erlscrypt).
 -on_load(init/0).
 
 -behaviour(application).

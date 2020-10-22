@@ -78,4 +78,4 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc,
 static ErlNifFunc nif_funcs[] = {
     {"scrypt", 6, scrypt, ERL_NIF_DIRTY_JOB_CPU_BOUND}};
 
-ERL_NIF_INIT(scrypt, nif_funcs, NULL, NULL, NULL, NULL);
+ERL_NIF_INIT(erlscrypt, nif_funcs, NULL, NULL, NULL, NULL);
