@@ -9,7 +9,7 @@ An Erlang NIF for Colin Percival's "scrypt" function.
 General information can be found in [these slides (PDF)](http://www.tarsnap.com/scrypt/scrypt-slides.pdf)
 and [Colin Percival's page on scrypt](http://www.tarsnap.com/scrypt.html).
 
-This library uses code from scrypt 1.6.6.
+This library uses code from scrypt 1.3.1.
 
 Using the library
 -----

@@ -28,15 +28,15 @@ jobs:
     - name: Unit tests
       run: rebar3 eunit
 
-#  macos:
-#    name: Test on MacOS
-#    runs-on: macos-latest
-#
-#    steps:
-#    - uses: actions/checkout@v2
-#    - name: Install Erlang and rebar3
-#      run: brew install erlang rebar3
-#    - name: Compile
-#      run: rebar3 compile
-#    - name: Unit tests
-#      run: rebar3 eunit
+  macos:
+    name: Test on MacOS
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Erlang and rebar3
+      run: brew install erlang rebar3
+    - name: Compile
+      run: rebar3 compile
+    - name: Unit tests
+      run: rebar3 eunit

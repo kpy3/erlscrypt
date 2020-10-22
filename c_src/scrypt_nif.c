@@ -2,7 +2,6 @@
 #include <string.h>
 #include "erl_nif.h"
 
-#include "scrypt_platform.h"
 #include "crypto_scrypt.h"
 
 static ERL_NIF_TERM mk_atom(ErlNifEnv *env, const char *atom) {

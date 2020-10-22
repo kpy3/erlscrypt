@@ -1,7 +1,0 @@
-#ifndef _SCRYPT_PLATFORM_H_
-#define	_SCRYPT_PLATFORM_H_
-
-#define HAVE_DECL_BE64ENC 0
-#define HAVE_POSIX_MEMALIGN 1
-
-#endif /* !_SCRYPT_PLATFORM_H_ */
