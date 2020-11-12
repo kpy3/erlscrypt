@@ -62,6 +62,7 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc,
 
   if (crypto_scrypt(passwd.data, passwd.size, salt.data, salt.size, N, r, p,
                     result.data, result.size)) {
+    enif_release_binary(&result);
     return report_scrypt_error(env);
   }
 
