@@ -14,12 +14,6 @@ static ERL_NIF_TERM mk_atom(ErlNifEnv *env, const char *atom) {
   return ret;
 }
 
-static ERL_NIF_TERM report_bad_param(ErlNifEnv *env, const char *param) {
-  return enif_raise_exception(
-      env, enif_make_tuple2(env, mk_atom(env, "bad_param"),
-                            enif_make_string(env, param, ERL_NIF_LATIN1)));
-}
-
 static ERL_NIF_TERM report_allocation_error(ErlNifEnv *env) {
   return enif_raise_exception(env, mk_atom(env, "allocation_error"));
 }
@@ -39,27 +33,27 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc,
   }
 
   if (!enif_inspect_binary(env, argv[0], &passwd)) {
-    return report_bad_param(env, "Passwd");
+    return enif_make_badarg(env);
   }
 
   if (!enif_inspect_binary(env, argv[1], &salt)) {
-    return report_bad_param(env, "Salt");
+    return enif_make_badarg(env);
   }
 
   if (!enif_get_uint(env, argv[2], &N)) {
-    return report_bad_param(env, "N");
+    return enif_make_badarg(env);
   }
 
   if (!enif_get_uint(env, argv[3], &r)) {
-    return report_bad_param(env, "R");
+    return enif_make_badarg(env);
   }
 
   if (!enif_get_uint(env, argv[4], &p)) {
-    return report_bad_param(env, "P");
+    return enif_make_badarg(env);
   }
 
   if (!enif_get_ulong(env, argv[5], &buf_len)) {
-    return report_bad_param(env, "Buflen");
+    return enif_make_badarg(env);
   }
 
   if (!enif_alloc_binary(buf_len, &result)) {
@@ -77,4 +71,4 @@ static ERL_NIF_TERM scrypt(ErlNifEnv *env, int argc,
 static ErlNifFunc nif_funcs[] = {
     {"scrypt", 6, scrypt, ERL_NIF_DIRTY_JOB_CPU_BOUND}};
 
-ERL_NIF_INIT(erlscrypt, nif_funcs, NULL, NULL, NULL, NULL);
+ERL_NIF_INIT(scrypt, nif_funcs, NULL, NULL, NULL, NULL);

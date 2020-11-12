@@ -20,15 +20,15 @@ Add library as dependency in `rebar.config`
         ...
     ]}.
 
-Add `erlscrypt` as application dependency
+Add `scrypt` as application dependency
 
     {application, app,
          [
           {applications, [
                           ...
-                          erlscrypt
+                          scrypt
                          ]},
           ...
          ]}. 
 
-Use `erlscrypt:scrypt/6` for encrypting data.
+Use `scrypt:scrypt/6` for encrypting data.

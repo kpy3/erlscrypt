@@ -1,4 +1,4 @@
--module(erlscrypt).
+-module(scrypt).
 -on_load(init/0).
 
 -behaviour(application).
@@ -7,7 +7,7 @@
 -export([scrypt/6]).
 
 -define(APPNAME, scrypt_nif).
--define(LIBNAME, erlscrypt).
+-define(LIBNAME, scrypt).
 
 %%%-------------------------------------------------------------------
 %%% Application callbacks
@@ -105,21 +105,21 @@ testvec4_test() ->
          = scrypt(<<"pleaseletmein">>, <<"SodiumChloride">>, 1048576, 8, 1, 64).
 
 check_bad_param_passwd_test() ->
-    ?assertException(error, {bad_param, "Passwd"}, scrypt(1, <<"">>, 1048576, 8, 1, 64)).
+    ?assertException(error, badarg, scrypt(1, <<"">>, 1048576, 8, 1, 64)).
 
 check_bad_param_salt_test() ->
-    ?assertException(error, {bad_param, "Salt"}, scrypt(<<"">>, 2, 1048576, 8, 1, 64)).
+    ?assertException(error, badarg, scrypt(<<"">>, 2, 1048576, 8, 1, 64)).
 
 check_bad_param_N_test() ->
-    ?assertException(error, {bad_param, "N"}, scrypt(<<"">>, <<"">>, "1048576", 8, 1, 64)).
+    ?assertException(error, badarg, scrypt(<<"">>, <<"">>, "1048576", 8, 1, 64)).
 
 check_bad_param_P_test() ->
-    ?assertException(error, {bad_param, "R"}, scrypt(<<"">>, <<"">>, 1048576, "8", 1, 64)).
+    ?assertException(error, badarg, scrypt(<<"">>, <<"">>, 1048576, "8", 1, 64)).
 
 check_bad_param_R_test() ->
-    ?assertException(error, {bad_param, "P"}, scrypt(<<"">>, <<"">>, 1048576, 8, "1", 64)).
+    ?assertException(error, badarg, scrypt(<<"">>, <<"">>, 1048576, 8, "1", 64)).
 
 check_bad_param_Buflen_test() ->
-    ?assertException(error, {bad_param, "Buflen"}, scrypt(<<"">>, <<"">>, 1048576, 8, 1, "64")).
+    ?assertException(error, badarg, scrypt(<<"">>, <<"">>, 1048576, 8, 1, "64")).
 
 -endif.
