@@ -6,7 +6,7 @@
 -export([start/2, stop/1]).
 -export([scrypt/6]).
 
--define(APPNAME, scrypt_nif).
+-define(APPNAME, scrypt).
 -define(LIBNAME, scrypt).
 
 %%%-------------------------------------------------------------------

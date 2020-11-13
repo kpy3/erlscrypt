@@ -1,6 +1,6 @@
 {application, scrypt,
  [{description, "Erlang NIF for scrypt"},
-  {vsn, "2.0.1"},
+  {vsn, "2.0.2"},
   {registered, []},
   {mod, {scrypt, []}},
   {applications,
