@@ -35,6 +35,7 @@
 #include "sysendian.h"
 
 #include "crypto_scrypt.h"
+#include "erl_nif.h"
 
 static void blkcpy(uint8_t *, uint8_t *, size_t);
 static void blkxor(uint8_t *, uint8_t *, size_t);
@@ -246,11 +247,11 @@ crypto_scrypt(const uint8_t * passwd, size_t passwdlen,
 	}
 
 	/* Allocate memory. */
-	if ((B = malloc(128 * r * p)) == NULL)
+	if ((B = enif_alloc(128 * r * p)) == NULL)
 		goto err0;
-	if ((XY = malloc(256 * r)) == NULL)
+	if ((XY = enif_alloc(256 * r)) == NULL)
 		goto err1;
-	if ((V = malloc(128 * r * N)) == NULL)
+	if ((V = enif_alloc(128 * r * N)) == NULL)
 		goto err2;
 
 	/* 1: (B_0 ... B_{p-1}) <-- PBKDF2(P, S, 1, p * MFLen) */
@@ -266,17 +267,17 @@ crypto_scrypt(const uint8_t * passwd, size_t passwdlen,
 	PBKDF2_SHA256(passwd, passwdlen, B, p * 128 * r, 1, buf, buflen);
 
 	/* Free memory. */
-	free(V);
-	free(XY);
-	free(B);
+	enif_free(V);
+	enif_free(XY);
+	enif_free(B);
 
 	/* Success! */
 	return (0);
 
 err2:
-	free(XY);
+	enif_free(XY);
 err1:
-	free(B);
+	enif_free(B);
 err0:
 	/* Failure! */
 	return (-1);
