@@ -53,7 +53,11 @@ init() ->
 
 compare_binaries(<<>>, <<>>, Acc) ->
     Acc;
-compare_binaries(<<A, RestA/binary>>, <<B, RestB/binary>>, Acc) ->
+compare_binaries(
+    <<A:1/unit:8, RestA/binary>>,
+    <<B:1/unit:8, RestB/binary>>,
+    Acc
+) ->
     compare_binaries(RestA, RestB, Acc bor (A bxor B)).
 
 %%%-------------------------------------------------------------------
