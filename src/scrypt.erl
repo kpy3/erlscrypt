@@ -4,20 +4,12 @@
 -behaviour(application).
 
 -export([start/2, stop/1]).
+
 -export([scrypt/6]).
+-export([is_equal/2]).
 
 -define(APPNAME, scrypt).
 -define(LIBNAME, scrypt).
-
-%%%-------------------------------------------------------------------
-%%% Application callbacks
-%%%-------------------------------------------------------------------
-
-start(_StartType, _StartArgs) ->
-    {ok, self()}.
-
-stop(_State) ->
-    ok.
 
 %%%-------------------------------------------------------------------
 %%% API
@@ -33,6 +25,12 @@ stop(_State) ->
 ) -> binary().
 scrypt(_Passwd, _Salt, _N, _R, _P, _Buflen) ->
     erlang:nif_error({not_loaded, [{module, ?MODULE}, {line, ?LINE}]}).
+
+%% @doc Compares the two binaries in constant-time to avoid timing attacks.
+
+-spec is_equal(binary(), binary()) -> boolean().
+is_equal(A, B) when is_binary(A), is_binary(B) ->
+    size(A) == size(B) andalso compare_binaries(A, B, 0) == 0.
 
 %%%-------------------------------------------------------------------
 %%% Internal
@@ -52,3 +50,18 @@ init() ->
                 filename:join(Dir, ?LIBNAME)
         end,
     erlang:load_nif(SoName, 0).
+
+compare_binaries(<<>>, <<>>, Acc) ->
+    Acc;
+compare_binaries(<<A, RestA/binary>>, <<B, RestB/binary>>, Acc) ->
+    compare_binaries(RestA, RestB, Acc bor (A bxor B)).
+
+%%%-------------------------------------------------------------------
+%%% Application callbacks
+%%%-------------------------------------------------------------------
+
+start(_StartType, _StartArgs) ->
+    {ok, self()}.
+
+stop(_State) ->
+    ok.

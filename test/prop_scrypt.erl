@@ -1,14 +1,22 @@
 -module(prop_scrypt).
 -include_lib("proper/include/proper.hrl").
 
--export([prop_test/0]).
+-export([prop_scrypt_test/0]).
+-export([prop_is_equal_test/0]).
+-export([prop_is_not_equal_test/0]).
 
 %%%%%%%%%%%%%%%%%%
 %%% Properties %%%
 %%%%%%%%%%%%%%%%%%
 
-prop_test() ->
-    ?FORALL(PasswordSalt, password_salt(), validate_scrypt(PasswordSalt)).
+prop_scrypt_test() ->
+    ?FORALL(PasswordSalt, {binary(), binary()}, validate_scrypt(PasswordSalt)).
+
+prop_is_equal_test() ->
+    ?FORALL(B, binary(), scrypt:is_equal(B, B)).
+
+prop_is_not_equal_test() ->
+    ?FORALL({A, B}, {non_empty(binary()), non_empty(binary())}, not scrypt:is_equal(A, B)).
 
 %%%%%%%%%%%%%%%
 %%% Helpers %%%
@@ -20,10 +28,3 @@ validate_scrypt({Password, Salt}) ->
     catch
         _:_ -> false
     end.
-
-%%%%%%%%%%%%%%%%%%
-%%% Generators %%%
-%%%%%%%%%%%%%%%%%%
-
-password_salt() ->
-    ?LET({Password, Salt}, {binary(), binary()}, {Password, Salt}).
