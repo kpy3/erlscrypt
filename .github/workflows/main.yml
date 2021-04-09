@@ -26,9 +26,9 @@ jobs:
     - name: Compile
       run: rebar3 compile
     - name: Check format
-      run: rebar3 fmt -c
+      run: rebar3 as dev fmt -c
     - name: Unit tests
-      run: rebar3 eunit
+      run: rebar3 as dev eunit
 
   macos:
     name: Test on MacOS
@@ -41,6 +41,6 @@ jobs:
     - name: Compile
       run: rebar3 compile
     - name: Check format
-      run: rebar3 fmt -c
+      run: rebar3 as dev fmt -c
     - name: Unit tests
-      run: rebar3 eunit
+      run: rebar3 as dev eunit
