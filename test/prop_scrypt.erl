@@ -16,7 +16,7 @@ prop_is_equal_test() ->
     ?FORALL(B, binary(), scrypt:is_equal(B, B)).
 
 prop_is_not_equal_test() ->
-    ?FORALL({A, B}, {non_empty(binary()), non_empty(binary())}, not scrypt:is_equal(A, B)).
+    ?FORALL({A, B}, non_equal_binaries(), not scrypt:is_equal(A, B)).
 
 %%%%%%%%%%%%%%%
 %%% Helpers %%%
@@ -28,3 +28,10 @@ validate_scrypt({Password, Salt}) ->
     catch
         _:_ -> false
     end.
+
+%%%%%%%%%%%%%%%%%%
+%%% Generators %%%
+%%%%%%%%%%%%%%%%%%
+
+non_equal_binaries() ->
+    ?LET(A, pos_integer(), {binary(A), binary(A)}).
