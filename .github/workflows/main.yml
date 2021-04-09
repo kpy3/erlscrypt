@@ -29,6 +29,8 @@ jobs:
       run: rebar3 as dev fmt -c
     - name: Unit tests
       run: rebar3 as dev eunit
+    - name: Proper tests
+      run: rebar3 as dev proper
 
   macos:
     name: Test on MacOS
@@ -44,3 +46,5 @@ jobs:
       run: rebar3 as dev fmt -c
     - name: Unit tests
       run: rebar3 as dev eunit
+    - name: Proper tests
+      run: rebar3 as dev proper
