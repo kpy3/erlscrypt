@@ -25,6 +25,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Compile
       run: rebar3 compile
+    - name: Check format
+      run: rebar3 fmt -c
     - name: Unit tests
       run: rebar3 eunit
 
@@ -38,5 +40,7 @@ jobs:
       run: brew install erlang rebar3
     - name: Compile
       run: rebar3 compile
+    - name: Check format
+      run: rebar3 fmt -c
     - name: Unit tests
       run: rebar3 eunit

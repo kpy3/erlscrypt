@@ -1,14 +1,14 @@
-{application, scrypt,
- [{description, "Erlang NIF for scrypt"},
-  {vsn, "2.0.2"},
-  {registered, []},
-  {mod, {scrypt, []}},
-  {applications,
-   [kernel,
-    stdlib
-   ]},
-  {env,[]},
+{application, scrypt, [
+    {description, "Erlang NIF for scrypt"},
+    {vsn, "2.0.2"},
+    {registered, []},
+    {mod, {scrypt, []}},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {env, []},
 
-  {licenses, ["Apache 2.0"]},
-  {links, [{"GitHub", "https://github.com/kpy3/erlscrypt"}]}
- ]}.
+    {licenses, ["Apache 2.0"]},
+    {links, [{"GitHub", "https://github.com/kpy3/erlscrypt"}]}
+]}.
