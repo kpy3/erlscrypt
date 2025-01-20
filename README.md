@@ -1,7 +1,7 @@
 Erlang NIF for scrypt
 =====================
 
-[![Build Status](https://github.com/kpy3/erlscrypt/workflows/Test/badge.svg)](https://github.com/kpy3/erlscrypt/actions?query=branch%3Amaster+workflow%3A"Test") [![Erlang Versions](https://img.shields.io/badge/Supported%20Erlang%2FOTP-21.0%20to%2024.0-blue)](http://www.erlang.org)
+[![Build Status](https://github.com/kpy3/erlscrypt/workflows/Test/badge.svg)](https://github.com/kpy3/erlscrypt/actions?query=branch%3Amaster+workflow%3A"Test") [![Erlang Versions](https://img.shields.io/badge/Supported%20Erlang%2FOTP-25.0%20to%2027.0-blue)](http://www.erlang.org)
 
 
 An Erlang NIF for Colin Percival's "scrypt" function. It uses dirty CPU schedulers for
