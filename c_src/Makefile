@@ -15,11 +15,12 @@ C_SRC_OUTPUT ?= $(CURDIR)/../priv/$(PROJECT).so
 # System type and C compiler/flags.
 
 UNAME_SYS := $(shell uname -s)
+UNAME_ARCH := $(shell uname -m)
 ifeq ($(UNAME_SYS), Darwin)
 	CC ?= cc
-	CFLAGS ?= -O3 -std=c99 -arch x86_64 -finline-functions -Wall -Wmissing-prototypes -fomit-frame-pointer -funroll-loops
-	CXXFLAGS ?= -O3 -arch x86_64 -finline-functions -Wall -fomit-frame-pointer -funroll-loops
-	LDFLAGS ?= -arch x86_64 -flat_namespace -undefined suppress
+	CFLAGS ?= -O3 -std=c99 -arch $(UNAME_ARCH) -finline-functions -Wall -Wmissing-prototypes -fomit-frame-pointer -funroll-loops
+	CXXFLAGS ?= -O3 -arch $(UNAME_ARCH) -finline-functions -Wall -fomit-frame-pointer -funroll-loops
+	LDFLAGS ?= -arch $(UNAME_ARCH) -flat_namespace -undefined suppress
 else ifeq ($(UNAME_SYS), FreeBSD)
 	CC ?= cc
 	CFLAGS ?= -O3 -std=c99 -finline-functions -Wall -Wmissing-prototypes -fomit-frame-pointer -funroll-loops
