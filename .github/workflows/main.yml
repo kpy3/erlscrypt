@@ -3,10 +3,10 @@ name: Test
 on:
   pull_request:
     branches:
-      - 'main'
+      - "main"
   push:
     branches:
-      - 'main'
+      - "main"
 
 jobs:
   linux:
@@ -15,36 +15,47 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [25, 26, 27]
+        # support for 26 ended 2026-04-26
+        # https://endoflife.date/erlang
+        otp_version: [27, 28, 29]
         os: [ubuntu-latest]
 
     container:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Compile
-      run: rebar3 compile
-    - name: Check format
-      run: rebar3 as test fmt -c
-    - name: Unit tests
-      run: rebar3 as test eunit
-    - name: Proper tests
-      run: rebar3 as test proper
+      - uses: actions/checkout@v6
+
+      - name: Compile
+        run: rebar3 compile
+
+      - name: Check format
+        run: rebar3 as test fmt -c
+
+      - name: Unit tests
+        run: rebar3 as test eunit
+
+      - name: Proper tests
+        run: rebar3 as test proper
 
   macos:
     name: Test on MacOS
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Install Erlang and rebar3
-      run: brew install erlang rebar3
-    - name: Compile
-      run: rebar3 compile
-    - name: Check format
-      run: rebar3 as test fmt -c
-    - name: Unit tests
-      run: rebar3 as test eunit
-    - name: Proper tests
-      run: rebar3 as test proper
+      - uses: actions/checkout@v6
+
+      - name: Install Erlang and rebar3
+        run: brew install erlang rebar3
+
+      - name: Compile
+        run: rebar3 compile
+
+      - name: Check format
+        run: rebar3 as test fmt -c
+
+      - name: Unit tests
+        run: rebar3 as test eunit
+
+      - name: Proper tests
+        run: rebar3 as test proper
